@@ -43,18 +43,18 @@
                 },
                 {
                     "name": "MouseLC",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "e9df3789-077f-40a6-81bc-e2f782b75926",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
                     "name": "MouseRC",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "389b3525-c75a-479d-a0d9-ececa56e5e7b",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -243,7 +243,7 @@
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KeyboardMouse",
                     "action": "MouseLC",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -254,7 +254,7 @@
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KeyboardMouse",
                     "action": "MouseRC",
                     "isComposite": false,
                     "isPartOfComposite": false

@@ -100,6 +100,7 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
+        private int _animIDIsBlock;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
@@ -162,6 +163,19 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            IsFight();
+        }
+
+        private void IsFight()
+        {
+            
+            if (!_input.mouseRC)
+                _animator.SetBool(_animIDIsBlock, false);
+            else
+            {
+                _animator.SetBool(_animIDIsBlock, true);
+
+            }
         }
 
         private void LateUpdate()
@@ -176,6 +190,7 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+            _animIDIsBlock = Animator.StringToHash("IsBlock");
         }
 
         private void GroundedCheck()

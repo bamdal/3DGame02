@@ -19,6 +19,8 @@ namespace StarterAssets
 		[Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
+		public bool mouseLC = false;
+		public bool mouseRC = false;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		public void OnMove(InputValue value)
@@ -37,7 +39,7 @@ namespace StarterAssets
 		public void OnJump(InputValue value)
 		{
 			JumpInput(value.isPressed);
-		}
+        }
 
 		public void OnSprint(InputValue value)
 		{
@@ -59,11 +61,23 @@ namespace StarterAssets
 		public void JumpInput(bool newJumpState)
 		{
 			jump = newJumpState;
-		}
+            
+        }
 
 		public void SprintInput(bool newSprintState)
 		{
 			sprint = newSprintState;
+		}
+
+		public void OnMouseLC(InputValue newMouseLC)
+		{
+			mouseLC = newMouseLC.isPressed; 
+		}
+		
+
+		public void OnMouseRC(InputValue newMouseRC)
+		{
+			mouseRC = newMouseRC.isPressed;
 		}
 
 		private void OnApplicationFocus(bool hasFocus)
