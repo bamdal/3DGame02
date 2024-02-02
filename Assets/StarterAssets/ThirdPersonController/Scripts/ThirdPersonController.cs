@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -90,6 +91,9 @@ namespace StarterAssets
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
 
+        // 플레이어 전투 시스템
+        private Queue<Vector3> inputDirection = new Queue<Vector3>();
+
         // timeout deltatime
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
@@ -163,10 +167,15 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
-            IsFight();
+            IsGuard();
         }
 
-        private void IsFight()
+        private void AttackState()
+        {
+
+        }
+
+        private void IsGuard()
         {
             
             if (!_input.mouseRC)
