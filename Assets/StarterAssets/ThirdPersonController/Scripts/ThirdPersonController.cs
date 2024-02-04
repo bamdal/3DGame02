@@ -17,10 +17,10 @@ namespace StarterAssets
     {
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 2.0f;
+        public float MoveSpeed = 40.0f;
 
         [Tooltip("Sprint speed of the character in m/s")]
-        public float SprintSpeed = 5.335f;
+        public float SprintSpeed = 60.0f;
 
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
@@ -91,8 +91,6 @@ namespace StarterAssets
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
 
-        // 플레이어 전투 시스템
-        private Queue<Vector3> inputDirection = new Queue<Vector3>();
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -104,7 +102,7 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
-        private int _animIDIsBlock;
+
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
@@ -162,30 +160,15 @@ namespace StarterAssets
 
         private void Update()
         {
-            _hasAnimator = TryGetComponent(out _animator);
+            //_hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
             GroundedCheck();
             Move();
-            IsGuard();
+ 
         }
 
-        private void AttackState()
-        {
 
-        }
-
-        private void IsGuard()
-        {
-            
-            if (!_input.mouseRC)
-                _animator.SetBool(_animIDIsBlock, false);
-            else
-            {
-                _animator.SetBool(_animIDIsBlock, true);
-
-            }
-        }
 
         private void LateUpdate()
         {
@@ -199,7 +182,7 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
-            _animIDIsBlock = Animator.StringToHash("IsBlock");
+
         }
 
         private void GroundedCheck()

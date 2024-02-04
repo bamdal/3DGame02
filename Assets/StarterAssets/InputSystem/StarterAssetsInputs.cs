@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace StarterAssets
 {
-    public class StarterAssetsInputs : MonoBehaviour
+    public class StarterAssetsInputs : PlayerState
     {
 
 
@@ -26,7 +26,7 @@ namespace StarterAssets
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 
-        private void Awake()
+        protected virtual void Awake()
         {
             
         }
@@ -47,17 +47,29 @@ namespace StarterAssets
         public void OnJump(InputAction.CallbackContext value)
         {
             if (value.performed)
+            { 
                 JumpInput(true);
+                GetPlayerBattle(playerState.Jump, move);
+            }
             if (value.canceled)
+            {
                 JumpInput(false);
+            
+            }
         }
 
         public void OnSprint(InputAction.CallbackContext value)
         {
             if (value.performed)
+            { 
                 SprintInput(true);
+                GetPlayerBattle(playerState.Dash, move);
+            }
             if (value.canceled)
+            { 
                 SprintInput(false);
+            
+            }
 
         }
 #endif
@@ -86,7 +98,14 @@ namespace StarterAssets
 
         public void OnMouseLC(InputAction.CallbackContext newMouseLC)
         {
-
+            if (newMouseLC.performed)
+            {
+                GetPlayerBattle(playerState.Attack, move);
+            }
+            if (newMouseLC.canceled)
+            {
+               
+            }
         }
 
 
@@ -94,11 +113,13 @@ namespace StarterAssets
         {
             if (newMouseRC.performed)
             {
-                mouseRC = true;
+                GetPlayerBattle(playerState.Guard, move);
             }
+            
             if (newMouseRC.canceled)
             {
-                mouseRC = false;
+                GetPlayerBattle(playerState.NonGuard, move);
+
             }
 
         }
