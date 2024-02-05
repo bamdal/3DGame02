@@ -49,10 +49,7 @@ public class PlayerState : MonoBehaviour
     private int _animIDIsHit= Animator.StringToHash("IsHit");
     private int _animIDIsGuradTrigger= Animator.StringToHash("IsGuradTrigger");
     private int _animIDIsJump = Animator.StringToHash("IsJump");
-    protected virtual void Awake()
-    {
-       
-    }
+
 
 
 
