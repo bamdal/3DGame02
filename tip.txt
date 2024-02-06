@@ -1,0 +1,1 @@
+cinemachinBrain에서 Blend에서 custom blends로 카메라 이동으로 인살하던가 할때 카메라 무브하면 됨
