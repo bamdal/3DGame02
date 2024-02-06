@@ -29,15 +29,15 @@ public class TargetLock : MonoBehaviour
     private float mouseX;
     private float mouseY;
 
+
     void Start()
     {
         maxAngle = 90f; // always 90 to target enemies in front of camera.
         cinemachineFreeLook.m_XAxis.m_InputAxisName = "";
         cinemachineFreeLook.m_YAxis.m_InputAxisName = "";
-        cinemachineFreeLook.m_XAxis.m_MaxValue = 30.0f;
-        cinemachineFreeLook.m_XAxis.m_MinValue = -30.0f;
+
     }
-    // cinemachineFreeLook.m_XAxis.m_MaxValue  최대최소로 락온 LookAt에 넣는걸로
+    
     void Update()
     {
         if (!isTargeting)
@@ -66,16 +66,22 @@ public class TargetLock : MonoBehaviour
     {
         if (isTargeting)
         {
+            cinemachineFreeLook.Priority = 5;
             isTargeting = false;
             currentTarget = null;
             return;
         }
+
+
+           
+     
 
         if (ClosestTarget())
         {
             currentTarget = ClosestTarget().transform;
             isTargeting = true;
         }
+
     }
 
     private void NewInputTarget(Transform target) // sets new input value.
@@ -88,8 +94,12 @@ public class TargetLock : MonoBehaviour
             aimIcon.transform.position = mainCamera.WorldToScreenPoint(target.position);
 
         if ((target.position - transform.position).magnitude < minDistance) return;
-        mouseX = (viewPos.x - 0.5f + targetLockOffset.x) * 3f;              // you can change the [ 3f ] value to make it faster or  slower
-        mouseY = (viewPos.y - 0.5f + targetLockOffset.y) * 3f;              // don't use delta time here.
+        cinemachineFreeLook.Priority = 11;
+        mouseX = (viewPos.x - 0.5f ) ;             
+        mouseY = (viewPos.y - 0.5f) ;
+     /*   mouseX = Mathf.Lerp(0.0f, viewPos.x - 0.5f, 0.9f);
+        mouseY = Mathf.Lerp(0.0f, viewPos.y - 0.5f, 0.9f);*/
+
     }
 
 

@@ -12,6 +12,21 @@ public class PlayerState : MonoBehaviour
     // 대쉬 가드, 점프는 현재 q를 지워버리고 다음차례로 대기
     // Player인풋으로 받는다 가드 공격 대쉬중에는 움직임과 점프 막기
 
+
+    /// <summary>
+    /// 사용가능 여부, 쿨타임이 0 이상 일시 저스트가드
+    /// </summary>
+    public bool CanParry => currentCoolTime > 0.0f;
+
+    /// <summary>
+    /// 저스트 가드 지속시간
+    /// </summary>
+    public float justParryTime = 0.1f;
+    /// <summary>
+    /// 현재 남아있는 쿨타임
+    /// </summary>
+    float currentCoolTime = 0;
+
     public enum playerState
     {
         Idle,
@@ -72,8 +87,9 @@ public class PlayerState : MonoBehaviour
     }
 
     /// <summary>
+    /// 각 행동별 개별 코드 여기 작성
     /// 현재상태버퍼 빼기 빠질때마다 다음 동작이 불려야 한다.
-    ///  공격,대쉬,가드 이후 다시 실행됨
+    /// 공격,대쉬,가드 이후 다시 실행됨
     /// </summary>
     public void PlayerStateDeQueue()
     {
@@ -91,6 +107,7 @@ public class PlayerState : MonoBehaviour
                 case playerState.Guard:
                     animator.SetTrigger(_animIDIsGuradTrigger);
                     animator.SetBool(_animIDIsGuard, true);
+                    Parrying();
                     break;
                 case playerState.Dash:
                     ReMove();
@@ -109,6 +126,8 @@ public class PlayerState : MonoBehaviour
         }
 
     }
+
+
 
     protected virtual void PlayerStateQueueClear()
     {
@@ -165,7 +184,7 @@ public class PlayerState : MonoBehaviour
                     PlayerStateQueueClear();        // 플레이어가 동작중이고 다음 행동을 강제로 바꿈
                     PlayerStateEnQueue(type, dir);
                 }
-                Debug.Log("대쉬");
+                Debug.Log("대쉬(미구현)");
                 break;
             case playerState.Jump:
                 if (state == playerState.Idle) // 전투 명령이 없는 상태일시
@@ -178,12 +197,12 @@ public class PlayerState : MonoBehaviour
                     PlayerStateQueueClear();        // 플레이어가 동작중이고 다음 행동을 강제로 바꿈
                     PlayerStateEnQueue(type, dir);
                 }
-                Debug.Log("점프");
+                Debug.Log("점프(미구현)");
                 break;
             case playerState.Hit:
                 PlayerStateQueueClear();
                 PlayerStateEnQueue(type, dir); // 즉각 적인 피드백이 필요 이녀석만을 위한 코드 필요
-                Debug.Log("Hit");
+                Debug.Log("Hit(미구현)");
                 break;
             default:
                 break;
@@ -198,7 +217,22 @@ public class PlayerState : MonoBehaviour
     /// </summary>
     private void ReMove()
     {
+        PlayerStateQueueClear();
         state = playerState.Idle;
         ThirdPersonController.enabled = true;
+    }
+
+    /// <summary>
+    /// 패링 기능 구현 0.1초 저스트가드 그 이후 초기화
+    /// </summary>
+    private void Parrying()
+    {
+        currentCoolTime = justParryTime; // 쿨타임 초기화
+    }
+
+    
+    private void FixedUpdate()
+    {
+        currentCoolTime -= Time.fixedDeltaTime;
     }
 }
