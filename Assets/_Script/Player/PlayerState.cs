@@ -65,6 +65,10 @@ public class PlayerState : MonoBehaviour
     private int _animIDIsGuradTrigger= Animator.StringToHash("IsGuradTrigger");
     private int _animIDIsJump = Animator.StringToHash("IsJump");
 
+    /// <summary>
+    /// 무기 트랜스폼
+    /// </summary>
+    public Transform Katana;
 
 
 

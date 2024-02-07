@@ -38,14 +38,9 @@ public class TargetLock : MonoBehaviour
 
     }
     
-    void Update()
+    void FixedUpdate()
     {
-        if (!isTargeting)
-        {
-            mouseX = Input.GetAxis("Mouse X");
-            mouseY = Input.GetAxis("Mouse Y");
-        }
-        else
+        if (isTargeting)
         {
             NewInputTarget(currentTarget);
         }
@@ -95,8 +90,8 @@ public class TargetLock : MonoBehaviour
 
         if ((target.position - transform.position).magnitude < minDistance) return;
         cinemachineFreeLook.Priority = 11;
-        mouseX = (viewPos.x - 0.5f ) ;             
-        mouseY = (viewPos.y - 0.5f) ;
+        mouseX = Mathf.Lerp(mouseX,viewPos.x  ,0.9f) ;             
+        mouseY = Mathf.Lerp(mouseY,viewPos.y , 0.9f) ;
      /*   mouseX = Mathf.Lerp(0.0f, viewPos.x - 0.5f, 0.9f);
         mouseY = Mathf.Lerp(0.0f, viewPos.y - 0.5f, 0.9f);*/
 

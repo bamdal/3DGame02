@@ -26,10 +26,6 @@ namespace StarterAssets
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 
-        protected virtual void Awake()
-        {
-            
-        }
         public void OnMove(InputAction.CallbackContext value)
         {
 
