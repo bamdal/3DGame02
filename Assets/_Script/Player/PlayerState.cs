@@ -70,6 +70,7 @@ public class PlayerState : MonoBehaviour
     /// </summary>
     public Transform Katana;
 
+    public Action<playerState> deligatePlayerState;
 
 
     /// <summary>
@@ -106,21 +107,28 @@ public class PlayerState : MonoBehaviour
             switch (state)
             {
                 case playerState.Attack:
+                    deligatePlayerState?.Invoke(playerState.Attack);
                     animator.SetTrigger(_animIDIsAttack);
                     break;
                 case playerState.Guard:
+                    deligatePlayerState?.Invoke(playerState.Guard);
                     animator.SetTrigger(_animIDIsGuradTrigger);
                     animator.SetBool(_animIDIsGuard, true);
                     Parrying();
                     break;
                 case playerState.Dash:
+                    deligatePlayerState?.Invoke(playerState.Dash);
+
                     ReMove();
                     break;
                 case playerState.Jump:
+                    deligatePlayerState?.Invoke(playerState.Jump);
                     ReMove();
                     animator.SetBool(_animIDIsJump, true);
                     break;
                 case playerState.Hit:
+                    deligatePlayerState?.Invoke(playerState.Hit);
+
                     break;
             }
         }
