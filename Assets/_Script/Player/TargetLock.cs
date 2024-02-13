@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.UI;
+using StarterAssets;
 
 public class TargetLock : MonoBehaviour
 {
     [Header("Objects")]
     [Space]
     [SerializeField] private Camera mainCamera;            // your main camera object.
-    [SerializeField] private CinemachineFreeLook cinemachineFreeLook; //cinemachine free lock camera object.
+    [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera; //cinemachine free lock camera object.
     [Space]
     [Header("UI")]
     [SerializeField] private Image aimIcon;  // ui image of aim icon u can leave it null.
@@ -29,12 +30,22 @@ public class TargetLock : MonoBehaviour
     private float mouseX;
     private float mouseY;
 
+    /// <summary>
+    /// 컨트롤러에서 카메라 잠그기 가져오는용
+    /// </summary>
+    StarterAssets.ThirdPersonController thirdPersonController;
 
+    /// <summary>
+    /// 플레이어 카메라 팔로우 트랜스폼
+    /// </summary>
+    Transform playerCameraRoot;
     void Start()
     {
+        thirdPersonController = GetComponent<ThirdPersonController>();
+        playerCameraRoot = transform.GetChild(0);
         maxAngle = 90f; // always 90 to target enemies in front of camera.
-        cinemachineFreeLook.m_XAxis.m_InputAxisName = "";
-        cinemachineFreeLook.m_YAxis.m_InputAxisName = "";
+        //cinemachineFreeLook.m_XAxis.m_InputAxisName = "";
+       // cinemachineFreeLook.m_YAxis.m_InputAxisName = "";
 
     }
     
@@ -48,12 +59,15 @@ public class TargetLock : MonoBehaviour
         if (aimIcon)
             aimIcon.gameObject.SetActive(isTargeting);
 
-        cinemachineFreeLook.m_XAxis.m_InputAxisValue = mouseX;
-        cinemachineFreeLook.m_YAxis.m_InputAxisValue = mouseY;
+       // cinemachineFreeLook.m_XAxis.m_InputAxisValue = mouseX;
+       // cinemachineFreeLook.m_YAxis.m_InputAxisValue = mouseY;
 
         if (Input.GetKeyDown(_Input))
         {
             AssignTarget();
+            thirdPersonController.LockCameraPosition = false;
+            cinemachineVirtualCamera.LookAt = null;
+            playerCameraRoot.transform.rotation = Quaternion.LookRotation(transform.forward);
         }
     }
 
@@ -61,7 +75,7 @@ public class TargetLock : MonoBehaviour
     {
         if (isTargeting)
         {
-            cinemachineFreeLook.Priority = 5;
+            //cinemachineVirtualCamera.Priority = 5;
             isTargeting = false;
             currentTarget = null;
             return;
@@ -89,11 +103,11 @@ public class TargetLock : MonoBehaviour
             aimIcon.transform.position = mainCamera.WorldToScreenPoint(target.position);
 
         if ((target.position - transform.position).magnitude < minDistance) return;
-        cinemachineFreeLook.Priority = 11;
-        mouseX = Mathf.Lerp(mouseX,viewPos.x  ,0.9f) ;             
-        mouseY = Mathf.Lerp(mouseY,viewPos.y , 0.9f) ;
-     /*   mouseX = Mathf.Lerp(0.0f, viewPos.x - 0.5f, 0.9f);
-        mouseY = Mathf.Lerp(0.0f, viewPos.y - 0.5f, 0.9f);*/
+        //cinemachineVirtualCamera.Priority = 11;
+        cinemachineVirtualCamera.LookAt = target.GetChild(0);
+        playerCameraRoot.transform.rotation = Quaternion.LookRotation(target.position - transform.position).normalized;
+        //thirdPersonController.LockCameraPosition = true;
+
 
     }
 

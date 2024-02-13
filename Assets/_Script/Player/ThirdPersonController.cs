@@ -208,8 +208,8 @@ namespace StarterAssets
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.fixedDeltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * cameraSpeed * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * cameraSpeed * deltaTimeMultiplier;
+                _cinemachineTargetYaw += _input.look.x * cameraSpeed * Time.fixedDeltaTime;
+                _cinemachineTargetPitch += _input.look.y * cameraSpeed * Time.fixedDeltaTime;
             }
 
             // clamp our rotations so our values are limited 360 degrees

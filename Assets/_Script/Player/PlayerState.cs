@@ -51,7 +51,7 @@ public class PlayerState : MonoBehaviour
     /// <summary>
     /// 상태저장버퍼의 최대값
     /// </summary>
-    static int queueSize = 3;
+    static int queueSize = 2;
 
     public ThirdPersonController ThirdPersonController;
 
