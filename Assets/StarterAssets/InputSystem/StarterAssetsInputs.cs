@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -14,6 +15,7 @@ namespace StarterAssets
         public Vector2 look;
         public bool jump;
         public bool sprint;
+        public bool lookOn;
 
         [Header("Movement Settings")]
         public bool analogMovement;
@@ -23,6 +25,8 @@ namespace StarterAssets
         public bool cursorInputForLook = true;
         public bool mouseLC = false;
         public bool mouseRC = false;
+
+
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 
@@ -119,6 +123,21 @@ namespace StarterAssets
             }
 
         }
+        public void OnLockOn(InputAction.CallbackContext newLockOn)
+        {
+            if (newLockOn.started)
+            {
+                lookOn = true;
+      
+            }
+            if (newLockOn.canceled)
+            {
+                lookOn = false;
+            }
+
+
+        }
+
 
         private void OnApplicationFocus(bool hasFocus)
         {

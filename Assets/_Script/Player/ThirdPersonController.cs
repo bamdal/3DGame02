@@ -83,6 +83,10 @@ namespace StarterAssets
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
 
+        // camera
+        private TargetLock _targetLock;
+        bool _locked = false;
+
         // player
         private float _speed;
         private float _animationBlend;
@@ -156,6 +160,17 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+            _targetLock = GetComponent<TargetLock>();
+
+        }
+
+        private void RotationTarget()
+        {
+            Vector3 forwardDirection = transform.forward;
+            forwardDirection.y = 0f;  // Keep the rotation only in the horizontal plane
+            forwardDirection.Normalize();
+            _cinemachineTargetYaw = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
+
         }
 
         private void FixedUpdate()
@@ -164,15 +179,19 @@ namespace StarterAssets
 
             JumpAndGravity();
             GroundedCheck();
+            
+           
+                
             Move();
-            CameraRotation();
+
         }
 
 
 
         private void LateUpdate()
         {
-            
+            if(!_locked)    // 아직 연결안함
+            CameraRotation();
         }
 
         private void AssignAnimationIDs()
@@ -208,10 +227,20 @@ namespace StarterAssets
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.fixedDeltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * cameraSpeed * Time.fixedDeltaTime;
-                _cinemachineTargetPitch += _input.look.y * cameraSpeed * Time.fixedDeltaTime;
-            }
+              
+                    _cinemachineTargetYaw += _input.look.x * cameraSpeed * Time.fixedDeltaTime;
+                    _cinemachineTargetPitch += _input.look.y * cameraSpeed * Time.fixedDeltaTime;
 
+                
+            }
+/*            if (_input.lookOn)  // Check if the rotate key is pressed // q누르면 카메라 플레이어방향으로 회전
+            {
+                // Rotate the camera based on the object's forward direction
+                Vector3 forwardDirection = transform.forward;
+                forwardDirection.y = 0f;  // Keep the rotation only in the horizontal plane
+                forwardDirection.Normalize();
+                _cinemachineTargetYaw = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
+            }*/
             // clamp our rotations so our values are limited 360 degrees
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);

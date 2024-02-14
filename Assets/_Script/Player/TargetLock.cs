@@ -4,6 +4,8 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.UI;
 using StarterAssets;
+using System;
+using UnityEngine.Windows;
 
 public class TargetLock : MonoBehaviour
 {
@@ -18,7 +20,6 @@ public class TargetLock : MonoBehaviour
     [Header("Settings")]
     [Space]
     [SerializeField] private string enemyTag; // the enemies tag.
-    [SerializeField] private KeyCode _Input;
     [SerializeField] private Vector2 targetLockOffset;
     [SerializeField] private float minDistance; // minimum distance to stop rotation if you get close to target
     [SerializeField] private float maxDistance;
@@ -39,13 +40,18 @@ public class TargetLock : MonoBehaviour
     /// 플레이어 카메라 팔로우 트랜스폼
     /// </summary>
     Transform playerCameraRoot;
+
+    private StarterAssetsInputs _input;
+
+    public Action<bool> Targeting;
     void Start()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
         playerCameraRoot = transform.GetChild(0);
         maxAngle = 90f; // always 90 to target enemies in front of camera.
-        //cinemachineFreeLook.m_XAxis.m_InputAxisName = "";
-       // cinemachineFreeLook.m_YAxis.m_InputAxisName = "";
+                        //cinemachineFreeLook.m_XAxis.m_InputAxisName = "";
+                        // cinemachineFreeLook.m_YAxis.m_InputAxisName = "";
+        _input = GetComponent<StarterAssetsInputs>();
 
     }
     
@@ -62,12 +68,12 @@ public class TargetLock : MonoBehaviour
        // cinemachineFreeLook.m_XAxis.m_InputAxisValue = mouseX;
        // cinemachineFreeLook.m_YAxis.m_InputAxisValue = mouseY;
 
-        if (Input.GetKeyDown(_Input))
+        if (_input.lookOn)
         {
             AssignTarget();
-            thirdPersonController.LockCameraPosition = false;
-            cinemachineVirtualCamera.LookAt = null;
-            playerCameraRoot.transform.rotation = Quaternion.LookRotation(transform.forward);
+
+            // playerCameraRoot.transform.rotation = Quaternion.LookRotation(transform.forward);
+         
         }
     }
 
@@ -77,6 +83,10 @@ public class TargetLock : MonoBehaviour
         {
             //cinemachineVirtualCamera.Priority = 5;
             isTargeting = false;
+            Targeting?.Invoke(isTargeting);
+      
+
+            cinemachineVirtualCamera.LookAt = null;
             currentTarget = null;
             return;
         }
@@ -89,6 +99,8 @@ public class TargetLock : MonoBehaviour
         {
             currentTarget = ClosestTarget().transform;
             isTargeting = true;
+
+            Targeting?.Invoke(isTargeting);
         }
 
     }
@@ -105,7 +117,7 @@ public class TargetLock : MonoBehaviour
         if ((target.position - transform.position).magnitude < minDistance) return;
         //cinemachineVirtualCamera.Priority = 11;
         cinemachineVirtualCamera.LookAt = target.GetChild(0);
-        playerCameraRoot.transform.rotation = Quaternion.LookRotation(target.position - transform.position).normalized;
+        playerCameraRoot.transform.rotation = Quaternion.LookRotation((target.position - transform.position).normalized);
         //thirdPersonController.LockCameraPosition = true;
 
 
