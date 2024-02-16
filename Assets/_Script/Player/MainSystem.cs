@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainSystem : MonoBehaviour
 {
@@ -21,10 +22,18 @@ public class MainSystem : MonoBehaviour
     float hp;
     float st;
 
+
     /// <summary>
     /// 초당 체간 재생력
     /// </summary>
     float stRecovery = 10.0f;
+
+    public float StRecovery 
+    { 
+        get => stRecovery * Hp / maxHp;
+
+    }
+
 
     /// <summary>
     /// 가드시 기존 체간재생력에서 증가될 비율
@@ -98,6 +107,9 @@ public class MainSystem : MonoBehaviour
     }
 
 
+    public Slider[] STSlider;
+    public Slider HPSlider;
+
 #if UNITY_EDITOR
     //테스트용 text에 Hp St 출력해보기
     public TextMeshPro HpText;
@@ -125,11 +137,19 @@ public class MainSystem : MonoBehaviour
         {
             if(IsGuard) // 가드모션중
             {
-                St -= Time.deltaTime * stRecovery * stRecoveryGuard;
+                St -= Time.deltaTime * StRecovery * stRecoveryGuard;
             }
             else        // 그냥 서있을때
             {
-                St -= Time.deltaTime * stRecovery;
+                St -= Time.deltaTime * StRecovery;
+            }
+        }
+
+        if(STSlider != null)
+        {
+            for(int i = 0; i < STSlider.Length; i++)
+            {
+                STSlider[i].value = St/maxSt;
             }
         }
     }
@@ -145,7 +165,7 @@ public class MainSystem : MonoBehaviour
     /// 가드중에 맞아서 체간이 늘어남
     /// </summary>
     /// <param name="Damege">체간 데미지</param>
-    protected virtual void StaminaDamege(float Damege)
+    public virtual void StaminaDamege(float Damege)
     {
         if(IsPerfectGuard)
         {
@@ -174,6 +194,10 @@ public class MainSystem : MonoBehaviour
     protected virtual void HpHitDamege(float Damage)
     {
         Hp -= Damage;
+        if (HPSlider != null)
+        {
+            HPSlider.value = Hp / maxHp;
+        }
         StopAllCoroutines();
         StartCoroutine(StaminaRecoveryTime());
     }
@@ -185,5 +209,20 @@ public class MainSystem : MonoBehaviour
     {
 
     }
+
+
+#if UNITY_EDITOR
+    public void TestHPSet(float hp)
+    {
+        HpHitDamege(hp);
+
+    }
+
+    public void TestIsGuard(bool g)
+    {
+        IsGuard = g;
+    }
+
+#endif
 
 }
