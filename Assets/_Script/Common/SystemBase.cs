@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class MainSystem : MonoBehaviour
+
+public class SystemBase : MonoBehaviour
 {
     // HP와 체간구현
     // 체간의 회복력은 현제 HP의 비례 Hp/maxHp 에서 나온 퍼센트에 회복력을 곱해서 조절
@@ -34,7 +34,6 @@ public class MainSystem : MonoBehaviour
 
     }
 
-
     /// <summary>
     /// 가드시 기존 체간재생력에서 증가될 비율
     /// </summary>
@@ -48,7 +47,7 @@ public class MainSystem : MonoBehaviour
     /// <summary>
     /// 가드중인지 파악
     /// </summary>
-    protected bool IsGuard = false;
+    public bool IsGuard = false;
 
     /// <summary>
     /// 퍼팩트가드 성공 파악
@@ -64,7 +63,7 @@ public class MainSystem : MonoBehaviour
     /// <summary>
     /// 전투후 체간이 차는 타이밍 시간
     /// </summary>
-    float nonCombatTime = 1.5f;
+    float nonCombatTime = 1.0f;
 
     /// <summary>
     /// 체간 재생 가능 - 공격, 가드, 피해받은후 nonCombatTime후에 재생가능
@@ -107,8 +106,9 @@ public class MainSystem : MonoBehaviour
     }
 
 
-    public Slider[] STSlider;
-    public Slider HPSlider;
+
+
+
 
 #if UNITY_EDITOR
     //테스트용 text에 Hp St 출력해보기
@@ -131,7 +131,7 @@ public class MainSystem : MonoBehaviour
     /// 체간 재생
     /// 전투중일 때는 안차고 비전투 유지 몇초후 재생시작 가드중일때 더 잘찬다
     /// </summary>
-    private void StaminaRecovery()
+    protected virtual void StaminaRecovery()
     {
         if(stRecoveryEnable) // 체간 회복이 가능할때
         {
@@ -145,13 +145,7 @@ public class MainSystem : MonoBehaviour
             }
         }
 
-        if(STSlider != null)
-        {
-            for(int i = 0; i < STSlider.Length; i++)
-            {
-                STSlider[i].value = St/maxSt;
-            }
-        }
+
     }
 
     IEnumerator StaminaRecoveryTime()
@@ -194,10 +188,7 @@ public class MainSystem : MonoBehaviour
     protected virtual void HpHitDamege(float Damage)
     {
         Hp -= Damage;
-        if (HPSlider != null)
-        {
-            HPSlider.value = Hp / maxHp;
-        }
+
         StopAllCoroutines();
         StartCoroutine(StaminaRecoveryTime());
     }

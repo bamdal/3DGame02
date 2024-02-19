@@ -51,7 +51,7 @@ public class PlayerState : MonoBehaviour
     /// <summary>
     /// 상태저장버퍼의 최대값
     /// </summary>
-    static int queueSize = 2;
+    static int queueSize = 1;
 
     public ThirdPersonController ThirdPersonController;
 
@@ -182,6 +182,7 @@ public class PlayerState : MonoBehaviour
                 Debug.Log("가드");
                 break;
             case playerState.NonGuard:
+                deligatePlayerState?.Invoke(playerState.NonGuard);
                 animator.SetBool(_animIDIsGuard, false);
                 ReMove();
                 break;

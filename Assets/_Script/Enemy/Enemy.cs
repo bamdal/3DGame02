@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IAlive
 {
     Animator animator;
     Transform EnemyWapon;
@@ -19,8 +19,14 @@ public class Enemy : MonoBehaviour
             animator.SetTrigger("EnemyHit");
         }
     }
-    private void Update()
+    private void FixedUpdate()
     {
         // 적 공격 회전 테스트
+        EnemyWapon.Rotate(Time.fixedDeltaTime * 360.0f * Vector3.up);
+    }
+
+    public void Hit(float dmg)
+    {
+        
     }
 }
