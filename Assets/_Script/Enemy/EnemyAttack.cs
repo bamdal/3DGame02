@@ -12,9 +12,12 @@ public class EnemyAttacK : MonoBehaviour, Attack
 
     PlayerState playerState;
 
+    public ParticleSystem Hit;
+    public ParticleSystem Guard;
+
     private void Awake()
     {
-        playerState = GetComponent<PlayerState>();
+        playerState = GameManager.Instance.Player.GetComponent<PlayerState>();
         playerState.deligatePlayerState += OnPlayerState;
     }
 
@@ -33,7 +36,7 @@ public class EnemyAttacK : MonoBehaviour, Attack
 
     public void OnAttack(GameObject obj)
     {
-        Debug.Log("플레이어 맞음");
+        Debug.Log($"{obj.name} 맞음");
         IAlive alive = obj.GetComponent<IAlive>();
         alive.Hit(damege);
     }
@@ -43,8 +46,17 @@ public class EnemyAttacK : MonoBehaviour, Attack
         if(other.CompareTag("Player"))
         {
             OnAttack(other.gameObject);
-            if(IsGuard) 
+            Vector3 point = other.ClosestPoint(transform.position);
+            if (IsGuard) 
             {
+                // 파티클 Instantiate로 꺼내서 쓰기
+                Guard.transform.position = point;
+                Guard.Play();
+            }
+            else
+            {
+                Hit.transform.position = point;
+                Hit.Play();
             }
         }
     }

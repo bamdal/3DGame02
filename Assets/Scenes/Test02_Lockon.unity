@@ -485,6 +485,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eef7738c4cc02a43a10915547c192e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Hit: {fileID: 5267603562723516590, guid: ecddbbbc6b13df94892bbcff052e8a91, type: 3}
+  Guard: {fileID: 353513272930940150, guid: b17ddbf2010eafd47b38a59d131ef331, type: 3}
 --- !u!1 &347894800
 GameObject:
   m_ObjectHideFlags: 0
@@ -3108,6 +3110,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damege: 10
+  Hit: {fileID: 5267603562723516590, guid: ecddbbbc6b13df94892bbcff052e8a91, type: 3}
+  Guard: {fileID: 353513272930940150, guid: b17ddbf2010eafd47b38a59d131ef331, type: 3}
 --- !u!1 &1725385025
 GameObject:
   m_ObjectHideFlags: 0
@@ -3193,7 +3197,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.614
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3538,6 +3542,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 490788084}
+  - {fileID: 5901649894063704688}
   - {fileID: 1243853610}
   - {fileID: 1495394139}
   - {fileID: 1593635347}
@@ -3550,4 +3555,3 @@ SceneRoots:
   - {fileID: 1471548891}
   - {fileID: 1608985460}
   - {fileID: 1264293632}
-  - {fileID: 5901649894063704688}

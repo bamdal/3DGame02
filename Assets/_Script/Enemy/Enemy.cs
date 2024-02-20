@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IAlive
+public class Enemy : SystemBase, IAlive
 {
     Animator animator;
     Transform EnemyWapon;
