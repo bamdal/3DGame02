@@ -26,7 +26,9 @@ namespace StarterAssets
         public bool mouseLC = false;
         public bool mouseRC = false;
 
+    
 
+            
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 
@@ -77,7 +79,12 @@ namespace StarterAssets
 
         public void MoveInput(Vector2 newMoveDirection)
         {
-            move = newMoveDirection;
+            if(!TargetLock)
+                move = newMoveDirection;
+/*            else
+                move = _targetLock.playerCameraRoot.transform.position;
+            // 공격방향으로캐릭터 돌리기 미구현 해야됨*/
+
         }
 
         public void LookInput(Vector2 newLookDirection)

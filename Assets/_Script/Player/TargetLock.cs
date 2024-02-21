@@ -39,11 +39,16 @@ public class TargetLock : MonoBehaviour
     /// <summary>
     /// 플레이어 카메라 팔로우 트랜스폼
     /// </summary>
-    Transform playerCameraRoot;
+    public Transform playerCameraRoot;
 
     private StarterAssetsInputs _input;
 
     public Action<bool> Targeting;
+
+    public float coolTime = 1.0f;
+    float currentCoolTime;
+
+    bool LookAtCoolTime => currentCoolTime < 0.0f;
     void Start()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
@@ -54,7 +59,12 @@ public class TargetLock : MonoBehaviour
         _input = GetComponent<StarterAssetsInputs>();
 
     }
-    
+
+    private void Update()
+    {
+        currentCoolTime -= Time.deltaTime;
+    }
+
     void FixedUpdate()
     {
         if (isTargeting)
@@ -68,8 +78,9 @@ public class TargetLock : MonoBehaviour
        // cinemachineFreeLook.m_XAxis.m_InputAxisValue = mouseX;
        // cinemachineFreeLook.m_YAxis.m_InputAxisValue = mouseY;
 
-        if (_input.lookOn)
+        if (_input.lookOn && LookAtCoolTime)
         {
+            currentCoolTime = coolTime;
             AssignTarget();
 
             // playerCameraRoot.transform.rotation = Quaternion.LookRotation(transform.forward);
@@ -118,7 +129,6 @@ public class TargetLock : MonoBehaviour
         //cinemachineVirtualCamera.Priority = 11;
         cinemachineVirtualCamera.LookAt = target.GetChild(0);
         playerCameraRoot.transform.rotation = Quaternion.LookRotation((target.position - transform.position).normalized);
-        //thirdPersonController.LockCameraPosition = true;
 
 
     }

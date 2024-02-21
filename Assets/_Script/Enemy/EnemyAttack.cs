@@ -12,8 +12,6 @@ public class EnemyAttacK : MonoBehaviour, Attack
 
     PlayerState playerState;
 
-    public ParticleSystem Hit;
-    public ParticleSystem Guard;
 
     private void Awake()
     {
@@ -49,14 +47,12 @@ public class EnemyAttacK : MonoBehaviour, Attack
             Vector3 point = other.ClosestPoint(transform.position);
             if (IsGuard) 
             {
-                // 파티클 Instantiate로 꺼내서 쓰기
-                Guard.transform.position = point;
-                Guard.Play();
+                Factory.Instance.GetGuard(point);
+
             }
             else
             {
-                Hit.transform.position = point;
-                Hit.Play();
+                Factory.Instance.GetHit(point);
             }
         }
     }

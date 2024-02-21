@@ -19,6 +19,8 @@ namespace StarterAssets
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 40.0f;
 
+        public float currentSpeed;
+
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 60.0f;
 
@@ -85,7 +87,7 @@ namespace StarterAssets
 
         // camera
         private TargetLock _targetLock;
-        bool _locked = false;
+        bool _locked => _targetLock.isTargeting;
 
         // player
         private float _speed;
@@ -140,6 +142,7 @@ namespace StarterAssets
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
+            currentSpeed = MoveSpeed;
         }
 
         private void Start()
@@ -164,14 +167,7 @@ namespace StarterAssets
 
         }
 
-        private void RotationTarget()
-        {
-            Vector3 forwardDirection = transform.forward;
-            forwardDirection.y = 0f;  // Keep the rotation only in the horizontal plane
-            forwardDirection.Normalize();
-            _cinemachineTargetYaw = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
 
-        }
 
         private void FixedUpdate()
         {
@@ -183,16 +179,13 @@ namespace StarterAssets
            
                 
             Move();
+            if (!_locked)    
+                CameraRotation();
 
         }
 
 
 
-        private void LateUpdate()
-        {
-            if(!_locked)    // 아직 연결안함
-            CameraRotation();
-        }
 
         private void AssignAnimationIDs()
         {
@@ -233,27 +226,30 @@ namespace StarterAssets
 
                 
             }
-/*            if (_input.lookOn)  // Check if the rotate key is pressed // q누르면 카메라 플레이어방향으로 회전
-            {
-                // Rotate the camera based on the object's forward direction
-                Vector3 forwardDirection = transform.forward;
-                forwardDirection.y = 0f;  // Keep the rotation only in the horizontal plane
-                forwardDirection.Normalize();
-                _cinemachineTargetYaw = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
-            }*/
+            /*            if (_input.lookOn)  // Check if the rotate key is pressed // q누르면 카메라 플레이어방향으로 회전
+                        {
+                            // Rotate the camera based on the object's forward direction
+                            Vector3 forwardDirection = transform.forward;
+                            forwardDirection.y = 0f;  // Keep the rotation only in the horizontal plane
+                            forwardDirection.Normalize();
+                            _cinemachineTargetYaw = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
+                        }*/
             // clamp our rotations so our values are limited 360 degrees
+       
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
             // Cinemachine will follow this target
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
+
+ 
         }
 
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = _input.sprint ? SprintSpeed : currentSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 

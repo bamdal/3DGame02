@@ -72,6 +72,13 @@ public class PlayerState : MonoBehaviour
 
     public Action<playerState> deligatePlayerState;
 
+    protected TargetLock _targetLock;
+    protected bool TargetLock => _targetLock.isTargeting;
+    private void Awake()
+    {
+        _targetLock = GetComponent<TargetLock>();
+    }
+
 
     /// <summary>
     /// 현재 상태를 최대 3가지 까지만 저장하고 현재 방향키에 입력된 방향을 받음
@@ -103,17 +110,19 @@ public class PlayerState : MonoBehaviour
         {
             state = inputStateBuffer.Dequeue();
             dir = inputDirectionBuffer.Dequeue();
-            ThirdPersonController.enabled = false; // 애니메이션중 움직임 금지
+            ThirdPersonController.currentSpeed = 0.0f; // 애니메이션중 움직임 금지
             switch (state)
             {
                 case playerState.Attack:
                     deligatePlayerState?.Invoke(playerState.Attack);
                     animator.SetTrigger(_animIDIsAttack);
+                    transform.rotation = Quaternion.LookRotation(dir);
                     break;
                 case playerState.Guard:
                     deligatePlayerState?.Invoke(playerState.Guard);
                     animator.SetTrigger(_animIDIsGuradTrigger);
                     animator.SetBool(_animIDIsGuard, true);
+                    transform.rotation = Quaternion.LookRotation(dir);
                     Parrying();
                     break;
                 case playerState.Dash:
@@ -232,7 +241,7 @@ public class PlayerState : MonoBehaviour
     {
         PlayerStateQueueClear();
         state = playerState.Idle;
-        ThirdPersonController.enabled = true;
+        ThirdPersonController.currentSpeed = ThirdPersonController.MoveSpeed;
     }
 
     /// <summary>

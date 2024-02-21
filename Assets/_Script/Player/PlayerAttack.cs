@@ -8,8 +8,7 @@ public class PlayerAttack : MonoBehaviour, Attack
     // EnemyAttack 거 가져와서 공격할때 가드인지 아닌지 파악후 이펙트 생성
     float playerDamege;
 
-    public ParticleSystem Hit;
-    public ParticleSystem Guard;
+
 
     private void Awake()
     {
@@ -29,13 +28,12 @@ public class PlayerAttack : MonoBehaviour, Attack
             Vector3 point = other.ClosestPoint(transform.position);
             if (other.gameObject.GetComponent<Enemy>().IsGuard)
             {
-                Guard.transform.position = point;
-                Guard.Play();
+                Factory.Instance.GetGuard(point);
             }
             else
             {
-                Hit.transform.position = point;
-                Hit.Play();
+
+                Factory.Instance.GetHit(point);
             }
         }
     }
