@@ -12,13 +12,19 @@ public class EnemyAttacK : MonoBehaviour, Attack
 
     PlayerState playerState;
 
+    float coolTime = 0.2f;
+    float currentCoolTime;
+    bool Attack => currentCoolTime < 0.0f;
 
     private void Awake()
     {
         playerState = GameManager.Instance.Player.GetComponent<PlayerState>();
         playerState.deligatePlayerState += OnPlayerState;
     }
-
+    private void Update()
+    {
+        currentCoolTime -= Time.deltaTime;
+    }
     private void OnPlayerState(playerState state)
     {
         switch (state)
@@ -41,18 +47,22 @@ public class EnemyAttacK : MonoBehaviour, Attack
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (Attack)
         {
-            OnAttack(other.gameObject);
-            Vector3 point = other.ClosestPoint(transform.position);
-            if (IsGuard) 
+            if (other.CompareTag("Player"))
             {
-                Factory.Instance.GetGuard(point);
+                OnAttack(other.gameObject);
+                Vector3 point = other.ClosestPoint(transform.position);
+                if (IsGuard)
+                {
+                    Factory.Instance.GetGuard(point);
 
-            }
-            else
-            {
-                Factory.Instance.GetHit(point);
+                }
+                else
+                {
+                    Factory.Instance.GetHit(point);
+                }
+                currentCoolTime = coolTime;
             }
         }
     }
