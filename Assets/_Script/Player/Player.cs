@@ -65,6 +65,7 @@ public class Player : SystemBase, IAlive
         if(IsGuard)
         {
             StaminaDamege(dmg);
+            // 애니메이션으로 콜라이더 켰다가 끄기 구현
         }
         else
         {
