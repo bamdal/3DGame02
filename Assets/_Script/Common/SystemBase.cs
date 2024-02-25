@@ -196,9 +196,9 @@ public class SystemBase : MonoBehaviour
     /// <summary>
     /// Hp가 0.1f 이하 일때 사망
     /// </summary>
-    private void OnDie()
+    protected virtual void OnDie()
     {
-
+        
     }
 
 

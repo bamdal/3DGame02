@@ -8,7 +8,7 @@ public class EnemyAttacK : MonoBehaviour, Attack
 {
     public float damege = 10.0f;
 
-    bool IsGuard = true;
+    bool IsGuard = false;
 
     PlayerState playerState;
 
@@ -16,10 +16,12 @@ public class EnemyAttacK : MonoBehaviour, Attack
     float currentCoolTime;
     bool Attack => currentCoolTime < 0.0f;
 
+
     private void Awake()
     {
         playerState = GameManager.Instance.Player.GetComponent<PlayerState>();
         playerState.deligatePlayerState += OnPlayerState;
+
     }
     private void Update()
     {
@@ -38,11 +40,11 @@ public class EnemyAttacK : MonoBehaviour, Attack
         }
     }
 
-    public void OnAttack(GameObject obj)
+    public void OnAttack(GameObject obj,bool DamageCategory)
     {
         Debug.Log($"{obj.name} 맞음");
         IAlive alive = obj.GetComponent<IAlive>();
-        alive.Hit(damege);
+        alive.Hit(damege, DamageCategory);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -51,15 +53,21 @@ public class EnemyAttacK : MonoBehaviour, Attack
         {
             if (other.CompareTag("Player"))
             {
-                OnAttack(other.gameObject);
+
                 Vector3 point = other.ClosestPoint(transform.position);
-                if (IsGuard)
+                Vector3 playerRoot = other.ClosestPoint(transform.root.position);
+                Vector3 directionToPoint = (transform.root.position - playerRoot).normalized;
+
+            
+                if (IsGuard && Vector3.Angle(directionToPoint,other.transform.root.forward) < 70.0f)
                 {
+                    OnAttack(other.gameObject, false);
                     Factory.Instance.GetGuard(point);
 
                 }
                 else
                 {
+                    OnAttack(other.gameObject,true);
                     Factory.Instance.GetHit(point);
                 }
                 currentCoolTime = coolTime;

@@ -27,7 +27,7 @@ public class TargetLock : MonoBehaviour
     public bool isTargeting;
 
     private float maxAngle;
-    private Transform currentTarget;
+    public Transform currentTarget;
     private float mouseX;
     private float mouseY;
 
@@ -69,6 +69,7 @@ public class TargetLock : MonoBehaviour
     {
         if (isTargeting)
         {
+
             NewInputTarget(currentTarget);
         }
 
@@ -87,6 +88,16 @@ public class TargetLock : MonoBehaviour
          
         }
     }
+
+    /// <summary>
+    /// 타게팅 강제 온오프 시도
+    /// </summary>
+    public void OutTarget()
+    {
+        AssignTarget();
+
+    }
+
 
     private void AssignTarget()
     {

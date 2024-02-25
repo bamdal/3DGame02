@@ -1,8 +1,10 @@
 using Cinemachine;
+using StarterAssets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static PlayerState;
 
@@ -18,12 +20,20 @@ public class Player : SystemBase, IAlive
   
     PlayerState playerState;
 
-   
+    Animator animator;
+
+    StarterAssets.ThirdPersonController ThirdPersonController;
+
+    readonly int _animIDOnDie = Animator.StringToHash("OnDie");
+
+    bool Alive = true;
 
     private void Start()
     {
         playerState = GetComponent<PlayerState>();
         playerState.deligatePlayerState += OnPlayerState;
+        animator = GetComponent<Animator>();
+        ThirdPersonController = GetComponent<ThirdPersonController>();
     }
 
     private void OnPlayerState(PlayerState.playerState state)
@@ -60,17 +70,29 @@ public class Player : SystemBase, IAlive
         }
     }
 
-    public void Hit(float dmg)
+    public void Hit(float dmg, bool DamageCategory)
     {
-        if(IsGuard)
+        if(DamageCategory)
         {
-            StaminaDamege(dmg);
-            // 애니메이션으로 콜라이더 켰다가 끄기 구현
+            HpHitDamege(dmg);
+            
         }
         else
         {
 
-            HpHitDamege(dmg);
+            StaminaDamege(dmg);
+        }
+    }
+
+    protected override void OnDie()
+    {
+        if (Alive)
+        {
+            Alive = false;
+            animator.SetTrigger(_animIDOnDie);
+            ThirdPersonController.enabled = false;
+
+
         }
     }
 }

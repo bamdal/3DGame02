@@ -22,11 +22,11 @@ public class PlayerAttack : MonoBehaviour, Attack
     {
         currentCoolTime -= Time.deltaTime;
     }
-    public void OnAttack(GameObject obj)
+    public void OnAttack(GameObject obj, bool DamageCategory)
     {
         Debug.Log($"{obj.name} 맞음");
         IAlive alive = obj.GetComponent<IAlive>();
-        alive.Hit(playerDamege);
+        alive.Hit(playerDamege, DamageCategory);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -36,15 +36,18 @@ public class PlayerAttack : MonoBehaviour, Attack
 
             if (other.CompareTag("Enemy"))
             {
-                OnAttack(other.gameObject);
+
                 Vector3 point = other.ClosestPoint(transform.position);
-                if (other.gameObject.GetComponent<Enemy>().IsGuard)
+                Vector3 playerRoot = other.ClosestPoint(transform.root.position);
+                Vector3 directionToPoint = (transform.root.position - playerRoot).normalized;
+                if (other.gameObject.GetComponent<Enemy>().IsGuard && Vector3.Angle(directionToPoint, other.transform.root.forward) < 70.0f)
                 {
+                    OnAttack(other.gameObject,false);
                     Factory.Instance.GetGuard(point);
                 }
                 else
                 {
-
+                    OnAttack(other.gameObject,true);
                     Factory.Instance.GetHit(point);
                 }
                 currentCoolTime = coolTime;

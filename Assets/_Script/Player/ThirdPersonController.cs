@@ -296,7 +296,13 @@ namespace StarterAssets
                     RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                if (!_locked)   //락온 하지 않으면 진행방향으로 회전
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                else // 락온 하면 락온대상으로 방향고정
+                {
+                    transform.rotation = Quaternion.LookRotation(_targetLock.currentTarget.transform.position - transform.position);
+
+                }
             }
 
 

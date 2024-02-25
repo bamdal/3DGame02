@@ -64,12 +64,12 @@ namespace StarterAssets
         {
             if (value.performed)
             { 
-                SprintInput(true);
+                //SprintInput(true);
                 GetPlayerBattle(playerState.Dash, move);
             }
             if (value.canceled)
             { 
-                SprintInput(false);
+                //SprintInput(false);
             
             }
 
@@ -81,9 +81,10 @@ namespace StarterAssets
         {
             if(!TargetLock)
                 move = newMoveDirection;
-/*            else
-                move = _targetLock.playerCameraRoot.transform.position;
-            // 공격방향으로캐릭터 돌리기 미구현 해야됨*/
+            else
+                move = newMoveDirection;
+            //move = _targetLock.playerCameraRoot.transform.position;
+            // 공격방향으로캐릭터 돌리기 미구현 해야됨
 
         }
 

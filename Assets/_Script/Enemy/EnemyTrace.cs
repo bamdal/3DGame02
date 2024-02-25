@@ -15,7 +15,7 @@ public class EnemyTrace : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            parentEnemy.StopPlayerFind();
+            parentEnemy.PlayerInSight();
            
         }    
     }
@@ -23,7 +23,7 @@ public class EnemyTrace : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            parentEnemy.StartPlayerFind();
+            parentEnemy.PlayerOutSight();
             Debug.Log("나감");
         }
     }

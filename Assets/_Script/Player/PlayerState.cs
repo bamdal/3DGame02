@@ -72,6 +72,16 @@ public class PlayerState : MonoBehaviour
 
     public Action<playerState> deligatePlayerState;
 
+    /// <summary>
+    /// _Lock 이 true면 현재 락온중 
+    /// </summary>
+    bool _Lock => _targetLock.isTargeting;
+
+    /// <summary>
+    /// 락온시 봐야하는 방향벡터
+    /// </summary>
+    Vector3 LockLookAt => _targetLock.currentTarget.transform.position - transform.position;
+
     protected TargetLock _targetLock;
     protected bool TargetLock => _targetLock.isTargeting;
     private void Awake()
@@ -116,18 +126,22 @@ public class PlayerState : MonoBehaviour
                 case playerState.Attack:
                     deligatePlayerState?.Invoke(playerState.Attack);
                     animator.SetTrigger(_animIDIsAttack);
-                    transform.rotation = Quaternion.LookRotation(dir);
+                    if(_Lock)
+                        transform.rotation = Quaternion.LookRotation(LockLookAt);
+                  
                     break;
                 case playerState.Guard:
                     deligatePlayerState?.Invoke(playerState.Guard);
                     animator.SetTrigger(_animIDIsGuradTrigger);
                     animator.SetBool(_animIDIsGuard, true);
-                    transform.rotation = Quaternion.LookRotation(dir);
+                    if (_Lock)
+                        transform.rotation = Quaternion.LookRotation(LockLookAt);
+
                     Parrying();
                     break;
                 case playerState.Dash:
                     deligatePlayerState?.Invoke(playerState.Dash);
-
+                    transform.rotation = Quaternion.LookRotation(dir);
                     ReMove();
                     break;
                 case playerState.Jump:
