@@ -106,7 +106,7 @@ public class SystemBase : MonoBehaviour
     }
 
 
-
+    Coroutine stcoroutine;
 
 
 
@@ -169,14 +169,16 @@ public class SystemBase : MonoBehaviour
         {
             St += Damege;
         }
-        StopAllCoroutines();
-        StartCoroutine(StaminaRecoveryTime());
+        
+        if(stcoroutine != null)
+            StopCoroutine(stcoroutine);
+        stcoroutine = StartCoroutine(StaminaRecoveryTime());
     }
 
     /// <summary>
     /// 체간이 가득차서 자세가 무너졌을때 체간 전부 회복
     /// </summary>
-    private void StaminaBrokenPosture()
+    protected virtual void StaminaBrokenPosture()
     {
         st = 0.0f;
     }
@@ -188,9 +190,9 @@ public class SystemBase : MonoBehaviour
     protected virtual void HpHitDamege(float Damage)
     {
         Hp -= Damage;
-
-        StopAllCoroutines();
-        StartCoroutine(StaminaRecoveryTime());
+        if (stcoroutine != null)
+            StopCoroutine(stcoroutine);
+        stcoroutine = StartCoroutine(StaminaRecoveryTime());
     }
 
     /// <summary>

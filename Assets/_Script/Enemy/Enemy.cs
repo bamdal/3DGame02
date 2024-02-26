@@ -24,6 +24,7 @@ public class Enemy : SystemBase, IAlive
     readonly int _animIDEnemySight = Animator.StringToHash("EnemySight");
     readonly int _animIDEnemyAttack = Animator.StringToHash("EnemyAttack");
     readonly int _animIDOnDie = Animator.StringToHash("OnDie");
+    readonly int _animIDEnemyHit = Animator.StringToHash("EnemyHit");
 
     /// <summary>
     /// 플레이어가 공격범위내에 있는지 유무 (true면 있다)
@@ -33,7 +34,7 @@ public class Enemy : SystemBase, IAlive
     /// <summary>
     /// 적은 strengthCount 만큼 맞을때 경직에 걸린다.
     /// </summary>
-    int strengthCount = 2;
+    int strengthCount = 1;
 
     /// <summary>
     /// 현재 강인함 수
@@ -158,13 +159,28 @@ public class Enemy : SystemBase, IAlive
 #endif
     }
 
+    /// <summary>
+    /// 맞고 난후에 자동으로 불려질 가드 모션
+    /// </summary>
+    void EnemyStartGuard()
+    {
+        IsGuard = true;
+    }
+
     public void Hit(float dmg, bool DamageCategory)
     {
         if (currentStrengthCount > 0)
         {
-            animator.SetTrigger("EnemyHit");
+            animator.SetTrigger(_animIDEnemyHit);
             currentStrengthCount--;
-            HpHitDamege(dmg);
+            if (DamageCategory)
+            {
+                HpHitDamege(dmg);
+            }
+            else
+            {
+                StaminaDamege(dmg);
+            }
         }
         else
         {

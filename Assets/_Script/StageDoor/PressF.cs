@@ -19,10 +19,7 @@ public class PressF : MonoBehaviour
         if(other.transform.CompareTag("Player"))
         {
             presstext.gameObject.SetActive(true);
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                SceneManager.LoadScene("StartScene");
-            }
+
         }
     }
 

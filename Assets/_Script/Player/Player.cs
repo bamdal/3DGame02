@@ -25,8 +25,20 @@ public class Player : SystemBase, IAlive
     StarterAssets.ThirdPersonController ThirdPersonController;
 
     readonly int _animIDOnDie = Animator.StringToHash("OnDie");
+    readonly int _animIDIsReaction = Animator.StringToHash("IsReaction");
+    readonly int _animIDIsHit = Animator.StringToHash("IsHit");
 
     bool Alive = true;
+
+    /// <summary>
+    /// true면 사망
+    /// </summary>
+    public Action<bool> onDie;
+
+    /// <summary>
+    /// true면 체간고갈
+    /// </summary>
+    public bool onReaction = false;
 
     private void Start()
     {
@@ -64,10 +76,37 @@ public class Player : SystemBase, IAlive
     protected override void HpHitDamege(float Damage)
     {
         base.HpHitDamege(Damage);
+        animator.SetTrigger(_animIDIsHit);
+        onReaction = true;
+        StartCoroutine(HpHitDamegeCoroutine());
         if (HPSlider != null)
         {
             HPSlider.value = Hp / maxHp;
         }
+    }
+
+    IEnumerator HpHitDamegeCoroutine()
+    {
+        Debug.Log(onReaction);
+        yield return new WaitForSeconds(0.5f);
+        onReaction = false;
+        Debug.Log(onReaction);
+    }
+
+    protected override void StaminaBrokenPosture()
+    {
+        base.StaminaBrokenPosture();
+        animator.SetTrigger(_animIDIsReaction);
+        onReaction = true;
+        StartCoroutine(StaminaBrokenPostureCoroutine());
+    }
+
+    IEnumerator StaminaBrokenPostureCoroutine()
+    {
+        Debug.Log(onReaction);
+        yield return new WaitForSeconds(1.833f);
+        onReaction = false;
+        Debug.Log(onReaction);
     }
 
     public void Hit(float dmg, bool DamageCategory)
@@ -91,7 +130,7 @@ public class Player : SystemBase, IAlive
             Alive = false;
             animator.SetTrigger(_animIDOnDie);
             ThirdPersonController.enabled = false;
-
+            onDie?.Invoke(true);
 
         }
     }

@@ -122,6 +122,11 @@ namespace StarterAssets
 
         private bool _hasAnimator;
 
+        /// <summary>
+        /// 조작가능 불가능 상태
+        /// </summary>
+        bool Operation => !GameManager.Instance.Player.onReaction;
+
         private bool IsCurrentDeviceMouse
         {
             get
@@ -148,7 +153,7 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -175,11 +180,16 @@ namespace StarterAssets
 
             JumpAndGravity();
             GroundedCheck();
-            
-           
-                
-            Move();
-            if (!_locked)    
+
+
+            if (Operation)
+            {
+                Move();
+
+            }
+
+
+            if (!_locked)
                 CameraRotation();
 
         }
@@ -220,11 +230,11 @@ namespace StarterAssets
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.fixedDeltaTime;
 
-              
-                    _cinemachineTargetYaw += _input.look.x * cameraSpeed * Time.fixedDeltaTime;
-                    _cinemachineTargetPitch += _input.look.y * cameraSpeed * Time.fixedDeltaTime;
 
-                
+                _cinemachineTargetYaw += _input.look.x * cameraSpeed * Time.fixedDeltaTime;
+                _cinemachineTargetPitch += _input.look.y * cameraSpeed * Time.fixedDeltaTime;
+
+
             }
             /*            if (_input.lookOn)  // Check if the rotate key is pressed // q누르면 카메라 플레이어방향으로 회전
                         {
@@ -235,7 +245,7 @@ namespace StarterAssets
                             _cinemachineTargetYaw = Mathf.Atan2(forwardDirection.x, forwardDirection.z) * Mathf.Rad2Deg;
                         }*/
             // clamp our rotations so our values are limited 360 degrees
-       
+
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
@@ -243,7 +253,7 @@ namespace StarterAssets
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
 
- 
+
         }
 
         private void Move()

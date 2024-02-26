@@ -82,6 +82,11 @@ public class PlayerState : MonoBehaviour
     /// </summary>
     Vector3 LockLookAt => _targetLock.currentTarget.transform.position - transform.position;
 
+    /// <summary>
+    /// 조작가능 불가능 상태
+    /// </summary>
+    bool Operation => !GameManager.Instance.Player.onReaction; 
+
     protected TargetLock _targetLock;
     protected bool TargetLock => _targetLock.isTargeting;
     private void Awake()
@@ -91,7 +96,7 @@ public class PlayerState : MonoBehaviour
 
 
     /// <summary>
-    /// 현재 상태를 최대 3가지 까지만 저장하고 현재 방향키에 입력된 방향을 받음
+    /// 현재 상태를 최대 queueSize 까지만 저장하고 현재 방향키에 입력된 방향을 받음
     /// </summary>
     /// <param name="dir">현재 방향키가 향하는 방향</param>
     protected virtual void PlayerStateEnQueue(playerState type, Vector3 dir)
@@ -116,7 +121,7 @@ public class PlayerState : MonoBehaviour
     public void PlayerStateDeQueue()
     {
 
-        if (inputDirectionBuffer.Count > 0 && inputStateBuffer.Count > 0)
+        if (inputDirectionBuffer.Count > 0 && inputStateBuffer.Count > 0 && Operation)
         {
             state = inputStateBuffer.Dequeue();
             dir = inputDirectionBuffer.Dequeue();
