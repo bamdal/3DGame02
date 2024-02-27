@@ -26,9 +26,10 @@ namespace StarterAssets
         public bool mouseLC = false;
         public bool mouseRC = false;
 
-    
+ 
 
-            
+
+
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 

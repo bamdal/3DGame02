@@ -25,6 +25,7 @@ public class Enemy : SystemBase, IAlive
     readonly int _animIDEnemyAttack = Animator.StringToHash("EnemyAttack");
     readonly int _animIDOnDie = Animator.StringToHash("OnDie");
     readonly int _animIDEnemyHit = Animator.StringToHash("EnemyHit");
+    readonly int _animIDEnemyGuard = Animator.StringToHash("IsGuard");
 
     /// <summary>
     /// 플레이어가 공격범위내에 있는지 유무 (true면 있다)
@@ -164,14 +165,14 @@ public class Enemy : SystemBase, IAlive
     /// </summary>
     void EnemyStartGuard()
     {
-        IsGuard = true;
+        EnemyGuard();
     }
 
     public void Hit(float dmg, bool DamageCategory)
     {
         if (currentStrengthCount > 0)
         {
-            animator.SetTrigger(_animIDEnemyHit);
+            EnemyGuard();
             currentStrengthCount--;
             if (DamageCategory)
             {
@@ -194,6 +195,17 @@ public class Enemy : SystemBase, IAlive
             }
 
         }
+    }
+
+    public void EnemyGuard()
+    {
+        IsGuard = true;
+        animator.SetTrigger(_animIDEnemyGuard);
+        if(currentStrengthCount > 0)
+        {
+            PlayerInSight();
+        }
+        
     }
 
     protected override void OnDie()

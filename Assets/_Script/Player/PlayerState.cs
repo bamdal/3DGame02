@@ -60,9 +60,9 @@ public class PlayerState : MonoBehaviour
 
     public Animator animator;
     private int _animIDIsGuard = Animator.StringToHash("IsGuard");
-    private int _animIDIsAttack= Animator.StringToHash("IsAttack");
-    private int _animIDIsHit= Animator.StringToHash("IsHit");
-    private int _animIDIsGuradTrigger= Animator.StringToHash("IsGuradTrigger");
+    private int _animIDIsAttack = Animator.StringToHash("IsAttack");
+    private int _animIDIsHit = Animator.StringToHash("IsHit");
+    private int _animIDIsGuradTrigger = Animator.StringToHash("IsGuradTrigger");
     private int _animIDIsJump = Animator.StringToHash("IsJump");
 
     /// <summary>
@@ -85,7 +85,7 @@ public class PlayerState : MonoBehaviour
     /// <summary>
     /// 조작가능 불가능 상태
     /// </summary>
-    bool Operation => !GameManager.Instance.Player.onReaction; 
+    bool Operation => !GameManager.Instance.Player.onReaction;
 
     protected TargetLock _targetLock;
     protected bool TargetLock => _targetLock.isTargeting;
@@ -94,6 +94,7 @@ public class PlayerState : MonoBehaviour
         _targetLock = GetComponent<TargetLock>();
     }
 
+    bool Alive => GameManager.Instance.Player.Alive;
 
     /// <summary>
     /// 현재 상태를 최대 queueSize 까지만 저장하고 현재 방향키에 입력된 방향을 받음
@@ -121,7 +122,7 @@ public class PlayerState : MonoBehaviour
     public void PlayerStateDeQueue()
     {
 
-        if (inputDirectionBuffer.Count > 0 && inputStateBuffer.Count > 0 && Operation)
+        if (inputDirectionBuffer.Count > 0 && inputStateBuffer.Count > 0 && Operation && Alive)
         {
             state = inputStateBuffer.Dequeue();
             dir = inputDirectionBuffer.Dequeue();

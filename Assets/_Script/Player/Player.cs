@@ -28,7 +28,10 @@ public class Player : SystemBase, IAlive
     readonly int _animIDIsReaction = Animator.StringToHash("IsReaction");
     readonly int _animIDIsHit = Animator.StringToHash("IsHit");
 
-    bool Alive = true;
+    /// <summary>
+    /// true면 살아있음
+    /// </summary>
+    public bool Alive = true;
 
     /// <summary>
     /// true면 사망
@@ -111,16 +114,20 @@ public class Player : SystemBase, IAlive
 
     public void Hit(float dmg, bool DamageCategory)
     {
-        if(DamageCategory)
+        if(Alive)
         {
-            HpHitDamege(dmg);
-            
-        }
-        else
-        {
+            if (DamageCategory)
+            {
+                HpHitDamege(dmg);
 
-            StaminaDamege(dmg);
+            }
+            else
+            {
+
+                StaminaDamege(dmg);
+            }
         }
+
     }
 
     protected override void OnDie()
