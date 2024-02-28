@@ -110,6 +110,10 @@ public class SystemBase : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// true면 사망
+    /// </summary>
+    public Action<bool> onDie;
 
     Coroutine stcoroutine;
 

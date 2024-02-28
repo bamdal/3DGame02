@@ -29,7 +29,9 @@ public class EnemyTrace : MonoBehaviour
                 case PlayerState.playerState.Attack:
                     parentEnemy.EnemyGuard(); // 적이 가드하는것 가져와서 넣기
                     break;
-            
+                default:
+                    parentEnemy.PlayerInSight();
+                    break;
             }
 
 
@@ -52,5 +54,7 @@ public class EnemyTrace : MonoBehaviour
             playerinsight = false;
         }
     }
+
+
 
 }

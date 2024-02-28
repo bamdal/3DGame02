@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class Test_UI : TestBase
 {
+#if UNITY_EDITOR
+
     Player player;
 
     private void Start()
@@ -35,4 +37,6 @@ public class Test_UI : TestBase
         player.TestIsGuard(false);
 
     }
+    
+    #endif
 }

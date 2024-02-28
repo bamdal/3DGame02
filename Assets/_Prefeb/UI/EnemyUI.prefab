@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4630112623455344151}
+  - component: {fileID: 4858578957934815012}
   m_Layer: 5
   m_Name: EnemyUI
   m_TagString: Untagged
@@ -37,6 +38,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4858578957934815012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3173349805499783143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed5ebb5ec00839b4e8ae43954534dca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
 --- !u!1001 &1805294771803475119
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45,6 +59,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4630112623455344151}
     m_Modifications:
+    - target: {fileID: 7133283650659693445, guid: 831993c26d1aa0b48beaa5f85afdec1e, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7191936278471971798, guid: 831993c26d1aa0b48beaa5f85afdec1e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -125,6 +143,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8175198487807294438, guid: 831993c26d1aa0b48beaa5f85afdec1e, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8175198487807294438, guid: 831993c26d1aa0b48beaa5f85afdec1e, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8311268803119792781, guid: 831993c26d1aa0b48beaa5f85afdec1e, type: 3}
       propertyPath: m_Name
       value: EnemySt
@@ -150,6 +176,10 @@ PrefabInstance:
     - target: {fileID: 188886236058459129, guid: 87c4a8fc236c494479e703667bee615b, type: 3}
       propertyPath: m_Name
       value: EnemyHp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2676253219845385721, guid: 87c4a8fc236c494479e703667bee615b, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6400644573033079227, guid: 87c4a8fc236c494479e703667bee615b, type: 3}
       propertyPath: m_Pivot.x
@@ -229,6 +259,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6400644573033079227, guid: 87c4a8fc236c494479e703667bee615b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8027122691967054473, guid: 87c4a8fc236c494479e703667bee615b, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

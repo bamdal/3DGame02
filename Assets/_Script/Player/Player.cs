@@ -33,10 +33,6 @@ public class Player : SystemBase, IAlive
     /// </summary>
     public bool Alive = true;
 
-    /// <summary>
-    /// true면 사망
-    /// </summary>
-    public Action<bool> onDie;
 
 
 

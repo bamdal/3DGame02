@@ -1,10 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
-
 
 public class Enemy : SystemBase, IAlive
 {
@@ -54,8 +52,10 @@ public class Enemy : SystemBase, IAlive
     /// </summary>
     TargetLock TargetLock;
 
-    Image imageHp;
-    Image imageSt;
+    public Action<float> EnemyChangeHP;
+    public Action<float> EnemyChangeST;
+
+
 
     public override float Hp 
     { 
@@ -63,7 +63,8 @@ public class Enemy : SystemBase, IAlive
         protected set 
         {
             base.Hp = value;
-            imageHp.fillAmount = Hp / maxHp;
+            EnemyChangeHP?.Invoke(value);
+           // imageHp.fillAmount = Hp / maxHp;
         } 
     }
 
@@ -73,9 +74,12 @@ public class Enemy : SystemBase, IAlive
         protected set 
         {
             base.St = value;
-            imageSt.fillAmount =1-( St / maxSt);
+            EnemyChangeST?.Invoke(value);
+            //imageSt.fillAmount =1-( St / maxSt);
         }
     }
+
+
 
 
     /*#if UNITY_EDITOR
@@ -94,10 +98,8 @@ public class Enemy : SystemBase, IAlive
         agent.SetDestination(player.transform.position);
         currentStrengthCount = strengthCount;
         CapsuleCollider = GetComponent<CapsuleCollider>();
-        Transform child = transform.GetChild(0);
-        imageHp = child.GetChild(0).GetComponent<Image>();
-        child = transform.GetChild(1);
-        imageSt = child.GetChild(0).GetComponent<Image>();
+
+
 #if UNITY_EDITOR
         HpText.text = $"HP : {Hp}";
         StText.text = $"ST : {St}";
@@ -113,6 +115,7 @@ public class Enemy : SystemBase, IAlive
         {
             Attacking = true;
             PlayerSight = true;
+            IsGuard = false;
             animator.SetBool(_animIDEnemySight, false);
             agent.isStopped = true;
             animator.SetTrigger(_animIDEnemyAttack);
@@ -205,6 +208,7 @@ public class Enemy : SystemBase, IAlive
     protected override void StaminaBrokenPosture()
     {
         base.StaminaBrokenPosture();
+        IsGuard = false;
         StaminaBrokenPos = true;
         animator.SetTrigger("IsReaction");
         StartCoroutine(StaminaBrokenPostureCoroutine());
@@ -233,7 +237,14 @@ public class Enemy : SystemBase, IAlive
         else
         {
 
+            if (DamageCategory)
+            {
                 HpHitDamege(dmg);
+            }
+            else
+            {
+                StaminaDamege(dmg);
+            }
 
 
 
@@ -261,6 +272,7 @@ public class Enemy : SystemBase, IAlive
     {
         if (Alive)
         {
+            onDie?.Invoke(true);
             Alive = false;
             transform.tag = "Ground";
             TargetLock.OutTarget();
