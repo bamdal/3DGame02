@@ -27,7 +27,7 @@ public class EnemyTrace : MonoBehaviour
             switch (state) 
             {
                 case PlayerState.playerState.Attack:
-                    Enemy. // 적이 가드하는것 가져와서 넣기
+                    parentEnemy.EnemyGuard(); // 적이 가드하는것 가져와서 넣기
                     break;
             
             }

@@ -38,10 +38,7 @@ public class Player : SystemBase, IAlive
     /// </summary>
     public Action<bool> onDie;
 
-    /// <summary>
-    /// true면 체간고갈
-    /// </summary>
-    public bool onReaction = false;
+
 
     private void Start()
     {
@@ -80,7 +77,7 @@ public class Player : SystemBase, IAlive
     {
         base.HpHitDamege(Damage);
         animator.SetTrigger(_animIDIsHit);
-        onReaction = true;
+        StaminaBrokenPos = true;
         StartCoroutine(HpHitDamegeCoroutine());
         if (HPSlider != null)
         {
@@ -90,26 +87,26 @@ public class Player : SystemBase, IAlive
 
     IEnumerator HpHitDamegeCoroutine()
     {
-        Debug.Log(onReaction);
+        Debug.Log(StaminaBrokenPos);
         yield return new WaitForSeconds(0.5f);
-        onReaction = false;
-        Debug.Log(onReaction);
+        StaminaBrokenPos = false;
+        Debug.Log(StaminaBrokenPos);
     }
 
     protected override void StaminaBrokenPosture()
     {
         base.StaminaBrokenPosture();
         animator.SetTrigger(_animIDIsReaction);
-        onReaction = true;
+        StaminaBrokenPos = true;
         StartCoroutine(StaminaBrokenPostureCoroutine());
     }
 
     IEnumerator StaminaBrokenPostureCoroutine()
     {
-        Debug.Log(onReaction);
+        Debug.Log(StaminaBrokenPos);
         yield return new WaitForSeconds(1.833f);
-        onReaction = false;
-        Debug.Log(onReaction);
+        StaminaBrokenPos = false;
+        Debug.Log(StaminaBrokenPos);
     }
 
     public void Hit(float dmg, bool DamageCategory)

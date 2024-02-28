@@ -85,7 +85,7 @@ public class PlayerState : MonoBehaviour
     /// <summary>
     /// 조작가능 불가능 상태
     /// </summary>
-    bool Operation => !GameManager.Instance.Player.onReaction;
+    bool Operation => !GameManager.Instance.Player.StaminaBrokenPos;
 
     protected TargetLock _targetLock;
     protected bool TargetLock => _targetLock.isTargeting;

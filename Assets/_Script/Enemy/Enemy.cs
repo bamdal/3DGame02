@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
+
 
 public class Enemy : SystemBase, IAlive
 {
@@ -46,10 +47,36 @@ public class Enemy : SystemBase, IAlive
 
     CapsuleCollider CapsuleCollider;
 
+    bool Attacking = false;
+
     /// <summary>
     /// Enemy 사망시 자동 타겟 해제용
     /// </summary>
     TargetLock TargetLock;
+
+    Image imageHp;
+    Image imageSt;
+
+    public override float Hp 
+    { 
+        get => base.Hp;
+        protected set 
+        {
+            base.Hp = value;
+            imageHp.fillAmount = Hp / maxHp;
+        } 
+    }
+
+    public override float St 
+    {
+        get => base.St;
+        protected set 
+        {
+            base.St = value;
+            imageSt.fillAmount =1-( St / maxSt);
+        }
+    }
+
 
     /*#if UNITY_EDITOR
     #endif*/
@@ -67,6 +94,10 @@ public class Enemy : SystemBase, IAlive
         agent.SetDestination(player.transform.position);
         currentStrengthCount = strengthCount;
         CapsuleCollider = GetComponent<CapsuleCollider>();
+        Transform child = transform.GetChild(0);
+        imageHp = child.GetChild(0).GetComponent<Image>();
+        child = transform.GetChild(1);
+        imageSt = child.GetChild(0).GetComponent<Image>();
 #if UNITY_EDITOR
         HpText.text = $"HP : {Hp}";
         StText.text = $"ST : {St}";
@@ -78,8 +109,9 @@ public class Enemy : SystemBase, IAlive
     /// </summary>
     public void PlayerInSight()
     {
-        if (Alive)
+        if (Alive && !Attacking)
         {
+            Attacking = true;
             PlayerSight = true;
             animator.SetBool(_animIDEnemySight, false);
             agent.isStopped = true;
@@ -120,6 +152,7 @@ public class Enemy : SystemBase, IAlive
 
     void EnemyFinishAttack()
     {
+        Attacking = false;
         currentStrengthCount = strengthCount;
         if (PlayerSight)
         {
@@ -145,6 +178,7 @@ public class Enemy : SystemBase, IAlive
     protected override void HpHitDamege(float Damage)
     {
         base.HpHitDamege(Damage);
+    
 #if UNITY_EDITOR
         HpText.text = $"HP : {Hp}";
         StText.text = $"ST : {St}";
@@ -168,12 +202,25 @@ public class Enemy : SystemBase, IAlive
         EnemyGuard();
     }
 
+    protected override void StaminaBrokenPosture()
+    {
+        base.StaminaBrokenPosture();
+        StaminaBrokenPos = true;
+        animator.SetTrigger("IsReaction");
+        StartCoroutine(StaminaBrokenPostureCoroutine());
+    }
+
+    IEnumerator StaminaBrokenPostureCoroutine()
+    {
+        yield return new WaitForSeconds(1.833f);
+        StaminaBrokenPos = false;
+    }
     public void Hit(float dmg, bool DamageCategory)
     {
-        if (currentStrengthCount > 0)
+        currentStrengthCount--;
+        if (currentStrengthCount > 0 && !StaminaBrokenPos)
         {
-            EnemyGuard();
-            currentStrengthCount--;
+
             if (DamageCategory)
             {
                 HpHitDamege(dmg);
@@ -185,27 +232,29 @@ public class Enemy : SystemBase, IAlive
         }
         else
         {
-            if (DamageCategory)
-            {
+
                 HpHitDamege(dmg);
-            }
-            else
-            {
-                StaminaDamege(dmg);
-            }
+
+
 
         }
     }
 
     public void EnemyGuard()
     {
-        IsGuard = true;
-        animator.SetTrigger(_animIDEnemyGuard);
-        if(currentStrengthCount > 0)
+   
+        if (currentStrengthCount > 0)
+        {
+            IsGuard = true;
+            Attacking = false;
+            animator.SetTrigger(_animIDEnemyGuard);
+
+        }
+        if (currentStrengthCount < 0)
         {
             PlayerInSight();
         }
-        
+
     }
 
     protected override void OnDie()

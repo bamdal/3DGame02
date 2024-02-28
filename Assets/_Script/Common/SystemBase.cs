@@ -71,12 +71,17 @@ public class SystemBase : MonoBehaviour
     bool stRecoveryEnable = true;
 
     /// <summary>
+    /// true면 체간고갈
+    /// </summary>
+    public bool StaminaBrokenPos = false;
+
+    /// <summary>
     /// 현재 HP (0~maxHp)
     /// </summary>
-    public float Hp
+    public virtual float Hp
     {
         get => hp;
-        private set
+        protected set
         {
             hp = value;
             hp = Mathf.Clamp(value, 0, maxHp);
@@ -91,10 +96,10 @@ public class SystemBase : MonoBehaviour
     /// <summary>
     /// 현재 체간 (0~maxSt)
     /// </summary>
-    public float St
+    public virtual float St
     {
         get => st;
-        set
+        protected set
         {
             st = value;
             st = Mathf.Clamp(value, 0, maxSt);
